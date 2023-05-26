@@ -1,73 +1,248 @@
+"use client";
 import Image from "next/image";
-import DialogPage from "@/components/dialog_page";
-import { Button, Dropdown } from "@nextui-org/react";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { usePathname } from "next/navigation";
+import { Menu, Transition } from "@headlessui/react";
+import { Fragment, useEffect, useRef, useState } from "react";
+import { ChevronDownIcon, Bars3Icon } from "@heroicons/react/20/solid";
 
-export default function Navbar() {
+const Navbar = () => {
+  const path = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+
+  const activeBtn = "bg-blue-500 hover:bg-blue-700 text-white ";
+  const unActiveBtn =
+    "bg-blue-100 text-[#505050] hover:bg-blue-500 hover:text-white ";
+
+  const btnCSS =
+    "inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors";
+
   return (
-    <nav className="fixed top-0 w-full p-4 flex justify-center text-[#303030] bg-white border-b-8 border-[#0c66fa] z-50">
-      <div className="max-w-7xl w-full flex gap-4 items-center justify-between ">
-        <a href="#">
+    <div className="sticky top-0 w-full p-2 flex flex-col justify-center items-center text-[#303030] bg-white border-b-8 border-[#0c66fa] z-50">
+      <div className="max-w-7xl w-full flex gap-4 items-center justify-between">
+        <Link className="relative h-14 w-48" href="/">
           <Image
-            className="rounded-2xl border-4 border-orange-300"
-            src="/elec_banner.jpg"
+            className="rounded-2xl border-orange-300"
+            src="/images/elec_banner.jpg"
             alt="elec_banner"
-            height={100}
-            width={200}
+            fill
           />
-        </a>
-        <ul className="flex gap-4 text-[#020202]">
-          <li>
-            <Button color="primary" auto>
-              <a href="#">หน้าหลัก</a>
-            </Button>
-          </li>
-          <li>
-            <Button color="primary" auto flat>
-              <a className="text-[#303030]" href="#">
-                เกี่ยวกับเรา
-              </a>
-            </Button>
-          </li>
-          <li>
-            <Dropdown>
-              <Dropdown.Button flat>
-                {" "}
-                <button className="text-[#303030]">หลักสูตร </button>{" "}
-              </Dropdown.Button>
-              <Dropdown.Menu
-                disabledKeys={["edit"]}
-                aria-label="Static Actions"
+        </Link>
+        <div className="hidden gap-4 md:flex">
+          <Link href="/">
+            <button
+              type="button"
+              className={`${path == "/" ? activeBtn : unActiveBtn} ${btnCSS} `}
+            >
+              หน้าหลัก
+            </button>
+          </Link>
+
+          <Menu as="div" className="relative inline-block text-left">
+            <div>
+              <Menu.Button
+                className={`${
+                  path.includes("/about") ? activeBtn : unActiveBtn
+                } ${btnCSS} `}
               >
-                <Dropdown.Item
-                  key="new"
-                  description="ระดับประกาศนียบัตรวิชาชีพ"
-                >
-                  ปวช.
-                </Dropdown.Item>
-                <Dropdown.Item
-                  key="copy"
-                  description="ระดับประกาศนียบัตรวิชาชีพชั้นสูง"
-                >
-                  ปวส.
-                </Dropdown.Item>
-                <Dropdown.Item key="edit" description="ระดับปริญญาตรี">
-                  ป.ตรี
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </li>
-          <li>
-            <Button color="primary" auto flat>
-              <a className="text-[#303030]" href="#">
-                ติดต่อเรา
-              </a>
-            </Button>
-          </li>
-          <li>
-            <DialogPage />
-          </li>
-        </ul>
+                เกี่ยวกับเรา
+                <ChevronDownIcon
+                  className="ml-2 -mr-1 h-5 w-5 "
+                  aria-hidden="true"
+                />
+              </Menu.Button>
+            </div>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="px-1 py-1 ">
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link href="/about/history">
+                        <button
+                          className={`${
+                            active ? "bg-blue-500 text-white" : "text-gray-900"
+                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                        >
+                          <h1 className="text-base">ประวัติของเรา</h1>
+                        </button>
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link href="/about/contact">
+                        <button
+                          className={`${
+                            active ? "bg-blue-500 text-white" : "text-gray-900"
+                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                        >
+                          <h1 className="text-base">ติดต่อเรา</h1>
+                        </button>
+                      </Link>
+                    )}
+                  </Menu.Item>
+                </div>
+              </Menu.Items>
+            </Transition>
+          </Menu>
+
+          <Menu as="div" className="relative inline-block text-left">
+            <div>
+              <Menu.Button
+                className={`${
+                  path.includes("/course") ? activeBtn : unActiveBtn
+                } ${btnCSS} `}
+              >
+                หลักสูตร
+                <ChevronDownIcon
+                  className="ml-2 -mr-1 h-5 w-5 "
+                  aria-hidden="true"
+                />
+              </Menu.Button>
+            </div>
+            <Transition
+              as={Fragment}
+              enter="transition ease-out duration-100"
+              enterFrom="transform opacity-0 scale-95"
+              enterTo="transform opacity-100 scale-100"
+              leave="transition ease-in duration-75"
+              leaveFrom="transform opacity-100 scale-100"
+              leaveTo="transform opacity-0 scale-95"
+            >
+              <Menu.Items className="absolute right-0 mt-2 w-56 origin-top-right divide-y divide-gray-100 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="px-1 py-1 ">
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link href="/course/voc_cert">
+                        <button
+                          className={`${
+                            active ? "bg-blue-500 text-white" : "text-gray-900"
+                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                        >
+                          <div className="text-left">
+                            <h1 className="font-bold">ปวช.</h1>
+                            <p>ระดับประกาศนียบัตรวิชาชีพ</p>
+                          </div>
+                        </button>
+                      </Link>
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    {({ active }) => (
+                      <Link href="/course/dip_voc_cert">
+                        <button
+                          className={`${
+                            active ? "bg-blue-500 text-white" : "text-gray-900"
+                          } group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                        >
+                          <div className="text-left">
+                            <h1 className="font-bold">ปวส.</h1>
+                            <p>ระดับประกาศนียบัตรวิชาชีพชั้นสูง</p>
+                          </div>
+                        </button>
+                      </Link>
+                    )}
+                  </Menu.Item>
+
+                  <Menu.Item disabled>
+                    {({ active }) => (
+                      <button
+                        className={`${
+                          active ? "bg-blue-500 text-white" : "text-gray-900"
+                        } text-opacity-60 group flex w-full items-center rounded-md px-2 py-2 text-sm`}
+                      >
+                        <div className="text-left ">
+                          <h1 className="font-bold">ป.ตรี</h1>
+                          <p>ระดับปริญาตรี</p>
+                        </div>
+                      </button>
+                    )}
+                  </Menu.Item>
+                </div>
+              </Menu.Items>
+            </Transition>
+          </Menu>
+
+          <Link href="/blog">
+            <button
+              type="button"
+              className={`${
+                path == "/contact" ? activeBtn : unActiveBtn
+              } ${btnCSS} `}
+            >
+              ข่าวสาร
+            </button>
+          </Link>
+
+          <Link href="/login">
+            <button
+              type="button"
+              className={`${
+                path == "/login" ? activeBtn : unActiveBtn
+              } ${btnCSS} `}
+            >
+              เข้าสู่ระบบ
+            </button>
+          </Link>
+        </div>
+        <div className="flex flex-col md:hidden">
+          <button className=" mr-4" onClick={() => setIsOpen(!isOpen)}>
+            <Bars3Icon className=" h-5 w-5" />
+          </button>
+        </div>
       </div>
-    </nav>
+      <div
+        className={`${
+          isOpen ? "flex" : "hidden"
+        } md:hidden w-full flex-col space-y-2 text-center mt-4`}
+      >
+        <Link
+          className="bg-blue-500 p-2 rounded-xl text-white h-full w-full"
+          href="/"
+          onClick={() => setIsOpen(false)}
+        >
+          หน้าหลัก
+        </Link>
+        <Link
+          className="bg-blue-500 p-2 rounded-xl text-white h-full w-full"
+          href="/about"
+          onClick={() => setIsOpen(false)}
+        >
+          เกี่ยวกับเรา
+        </Link>
+        <Link
+          className="bg-blue-500 p-2 rounded-xl text-white h-full w-full"
+          href="/about"
+          onClick={() => setIsOpen(false)}
+        >
+          หลักสูตร
+        </Link>
+        <Link
+          className="bg-blue-500 p-2 rounded-xl text-white h-full w-full"
+          href="/contact"
+          onClick={() => setIsOpen(false)}
+        >
+          ติดต่อเรา
+        </Link>
+        <Link
+          className="bg-blue-500 p-2 rounded-xl text-white h-full w-full"
+          href="/login"
+          onClick={() => setIsOpen(false)}
+        >
+          เข้าสู่ระบบ
+        </Link>
+      </div>
+    </div>
   );
-}
+};
+
+export default Navbar;
