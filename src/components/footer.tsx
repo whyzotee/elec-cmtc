@@ -14,15 +14,18 @@ const Footer = () => {
               <p>โทร: 053217708</p>
             </div>
             <div className="flex gap-4 py-2">
-              <a href="https://web.facebook.com/electronicscmtc">
+              <Link
+                href="https://web.facebook.com/electronicscmtc"
+                target="_blank"
+              >
                 <button className="h-8 w-8 bg-[url(/images/social_logo/facebook_logo.svg)] bg-cover bg-no-repeat rounded-full"></button>
-              </a>
-              <a href="#">
+              </Link>
+              <Link href="#" target="_blank">
                 <button className="h-8 w-8 bg-[url(/images/social_logo/line_logo.svg)] bg-cover bg-no-repeat rounded-full"></button>
-              </a>
-              <a href="#">
+              </Link>
+              <Link href="#" target="_blank">
                 <button className="h-8 w-8 bg-[url(/images/social_logo/youtube_logo.svg)] bg-cover bg-no-repeat rounded-full"></button>
-              </a>
+              </Link>
             </div>
           </div>
 
