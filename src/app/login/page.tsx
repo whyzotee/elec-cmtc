@@ -1,7 +1,15 @@
+import Image from "next/image";
+
 const PostPage = () => {
   return (
-    <main className="max-w-7xl mx-auto my-12 ">
-      <div className="h-[80vh] flex flex-col justify-center items-center">
+    <main className="max-w-7xl mx-auto my-24">
+      <div className="flex flex-col justify-center items-center">
+        <Image
+          src="/images/elec_logo.svg"
+          alt="elec_logo"
+          height={150}
+          width={150}
+        />
         <h1 className="text-xl">โปรดเข้าสู่ระบบ</h1>
         <br />
         <form

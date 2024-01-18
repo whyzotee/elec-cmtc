@@ -4,13 +4,32 @@ import Image from "next/image";
 import Link from "next/link";
 import Typed from "typed.js";
 import ElecRegisStudent from "../../public/images/elec_regis_student.jpg";
-import ElecRegisStudent2 from "../../public/images/elec_regis_student2.jpg";
+import CmtcRegisStudent from "../../public/images/elec_regis_student2.jpg";
+import CmtcRegisStudent2 from "../../public/images/elec_regis_student3.jpg";
+
+import { motion } from "framer-motion";
+import { basePath } from "@/lib/setting";
+
+const getBlogData = async () => {
+  const res = await fetch(`${basePath}/api/get-home-page.php`);
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch data");
+  }
+
+  return res.json();
+};
 
 export default function Home() {
+  const [blogData, setBlogData] = React.useState<any>([]);
   const el = React.useRef(null);
 
   React.useEffect(() => {
-    const typed = new Typed(el.current, {
+    getBlogData().then((res) => {
+      setBlogData(res);
+    });
+
+    new Typed(el.current, {
       strings: ["มีงานทำแน่นอน", "ทำงานตรงสาย", "อาชีพในอนาคต"],
       typeSpeed: 150,
       backSpeed: 100,
@@ -19,8 +38,16 @@ export default function Home() {
     });
   }, []);
 
+  if (blogData == null) {
+    return (
+      <main className="h-screen w-full flex items-center justify-center">
+        <h1>Loading</h1>
+      </main>
+    );
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between">
+    <main className="flex min-h-screen w-full flex-col items-center justify-between overflow-x-hidden">
       <div className="body relative bg-contain h-screen w-full flex border-b-4 border-blue-500">
         <Image
           className="absolute object-cover"
@@ -31,133 +58,117 @@ export default function Home() {
         <div className="h-full w-full absolute bg-black bg-opacity-50"></div>
         <div className="h-full max-w-7xl w-full m-auto flex flex-col justify-center items-center lg:items-start z-10">
           <div className="flex flex-col text-white ">
-            {/* <div className="flex gap-12 ">
-              <Image
-                src="/images/cmtc_logo.png"
-                alt="cmtc_logo"
-                height={150}
-                width={150}
-              />
-              <Image
-                src="/images/elec_logo.svg"
-                alt="elec_logo"
-                height={150}
-                width={150}
-              />
-            </div>
-            <br /> */}
             <div className="text-4xl lg:text-6xl">
-              <h1 className="mb-0">เริ่มต้นเรียนกับเรา</h1>
+              <motion.h1
+                initial={{ translateX: -100, opacity: 0 }}
+                animate={{ translateX: 0, opacity: 1 }}
+                transition={{ duration: 0.5 }}
+              >
+                เริ่มต้นเรียนกับเรา
+              </motion.h1>
               <div className="flex">
                 <span ref={el}></span>
                 <span>&nbsp;</span>
               </div>
             </div>
-            <p className="text-base lg:text-2xl">
-              ที่ แผนกอิเล็กทรอนิกส์ วิทยาลัยเทคนิคเชียงใหม่
-            </p>
-            <br />
-            <Link
-              className="self-center lg:self-start px-4 py-3 mr-12 rounded-2xl text-blue-500 bg-white hover:bg-gray-100 transition-colors"
-              href="https://e-regis.cmtc.ac.th/"
-              target="_blank"
+            <motion.h1
+              initial={{ translateX: 100, opacity: 0 }}
+              animate={{ translateX: 0, opacity: 1 }}
+              transition={{ duration: 0.5 }}
+              className="text-base lg:text-2xl"
             >
-              เพิ่มเติม
-            </Link>
+              ที่ แผนกอิเล็กทรอนิกส์ วิทยาลัยเทคนิคเชียงใหม่
+            </motion.h1>
+
+            <br />
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <Link
+                className="w-fit mx-auto lg:mx-0 px-3 py-2 rounded-lg text-white border-2 border-white hover:bg-white hover:text-blue-500 transition-colors"
+                href="https://e-regis.cmtc.ac.th/"
+                target="_blank"
+              >
+                ลงเบียนเรียน
+              </Link>
+            </motion.div>
           </div>
         </div>
       </div>
 
       <div className="max-w-7xl w-full flex flex-col m-auto">
-        <h1 className="text-4xl text-left mt-12">ข่าวสารจากทางแผนก</h1>
-        <Image
-          className="pt-12"
-          src={ElecRegisStudent2}
-          alt="elec_regis_student2"
-        />
-        <Image
-          className="pt-12"
-          src={ElecRegisStudent}
-          alt="elec_regis_student"
-        />
-      </div>
-
-      <div className=" max-w-7xl m-auto flex flex-col justify-center items-center ">
-        <h1 className="text-4xl text-left my-12">ประชาสัมพันธ์</h1>
-        <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-4 m-auto px-4">
-          <div className="bg-gray-400">
-            <div className="relative h-[300px]">
+        <motion.h1
+          initial={{ translateX: -100, opacity: 0 }}
+          whileInView={{ translateX: 0, opacity: 1 }}
+          viewport={{ once: true }}
+          className="text-center lg:text-left text-4xl mt-12 text-[#303030]"
+        >
+          ประกาศจากทางวิทยาลัย
+        </motion.h1>
+        <div className="flex gap-4 mt-12 px-4">
+          <Link href="#" className="hover:scale-105 transition-all">
+            <Image
+              src={ElecRegisStudent}
+              alt="elec_regis_student"
+              className="h-full object-cover rounded-xl"
+            />
+          </Link>
+          <div className="flex flex-col justify-between">
+            <Link href="#" className="hover:scale-105 transition-all">
               <Image
-                className="object-cover"
-                src="/images/elec_logo.svg"
-                alt="elec_logo"
-                fill
+                src={CmtcRegisStudent2}
+                alt="elec_regis_student2"
+                className="rounded-xl"
               />
-            </div>
-            <div className="flex flex-col p-4 text-xl bg-white shadow-lg">
-              <h4 className="line-clamp-2">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum
-                incidunt rerum praesentium ad commodi alias dolores consequatur
-              </h4>
-              <br />
-              <button className="bg-blue-500 hover:bg-blue-400 p-2 rounded-xl">
-                <Link className="self-end text-white" href="#">
-                  ดูเพื่มเติม
-                </Link>
-              </button>
-            </div>
-          </div>
-          <div className="bg-gray-400">
-            <div className="relative h-[300px]">
+            </Link>
+            <Link href="#" className="hover:scale-105 transition-all">
               <Image
-                className="object-cover"
-                src="/images/elec_logo.svg"
-                alt="elec_logo"
-                fill
+                src={CmtcRegisStudent}
+                alt="elec_regis_student2"
+                className="rounded-xl"
               />
-            </div>
-            <div className="flex flex-col p-4 text-xl bg-white shadow-lg">
-              <h4 className="line-clamp-2">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum
-                incidunt rerum praesentium ad commodi alias dolores consequatur
-              </h4>
-              <br />
-              <button className="bg-blue-500 hover:bg-blue-400 p-2 rounded-xl">
-                <Link className="self-end text-white" href="#">
-                  ดูเพื่มเติม
-                </Link>
-              </button>
-            </div>
-          </div>
-          <div className="bg-gray-400">
-            <div className="relative h-[300px]">
-              <Image
-                className="object-cover"
-                src="/images/elec_logo.svg"
-                alt="elec_logo"
-                fill
-              />
-            </div>
-            <div className="flex flex-col p-4 text-xl bg-white shadow-lg">
-              <h4 className="line-clamp-2">
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit. Illum
-                incidunt rerum praesentium ad commodi alias dolores consequatur
-              </h4>
-              <br />
-              <button className="bg-blue-500 hover:bg-blue-400 p-2 rounded-xl">
-                <Link className="self-end text-white" href="#">
-                  ดูเพื่มเติม
-                </Link>
-              </button>
-            </div>
+            </Link>
           </div>
         </div>
-        <div className="w-full flex my-8 p-8 justify-center items-end ">
-          <button className="bg-blue-500 hover:bg-blue-400 py-2 px-8 rounded-full">
-            <Link className="text-white" href="/blog">
-              เพื่มเติม
-            </Link>
-          </button>
+      </div>
+
+      <div className="max-w-7xl m-auto flex flex-col justify-center items-center pb-12 text-[#303030]">
+        <h1 className="text-4xl text-left my-12">ประชาสัมพันธ์</h1>
+        <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-4 m-auto px-4">
+          {blogData.map((element: BlogType) => (
+            <div key={element.id}>
+              <div className="shadow-xl rounded-xl bg-white hover:scale-105 transition-all">
+                <div className="relative h-56">
+                  <Image
+                    className="absolute object-cover rounded-t-xl"
+                    src={element.img_path}
+                    alt={element.img_path}
+                    fill
+                  />
+                  <span className="absolute right-0 bg-white p-1 rounded-md m-2">
+                    {new Date(element.date).toLocaleDateString("th-TH")}
+                  </span>
+                </div>
+                <div className=" flex flex-col p-4">
+                  <h1 className="line-clamp-1 text-xl font-semibold">
+                    {element.topic}
+                  </h1>
+
+                  <p className="h-[4.5rem] w-full line-clamp-3 my-4">
+                    {element.description}
+                  </p>
+                  <Link
+                    href={"/blog/?id=" + element.id}
+                    className="text-center text-blue-500 border-2 border-blue-500 px-3 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors"
+                  >
+                    อ่านต่อ
+                  </Link>
+                </div>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </main>

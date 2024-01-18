@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import { usePathname } from "next/navigation";
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useRef, useState } from "react";
+import { Fragment, useState } from "react";
 import { ChevronDownIcon, Bars3Icon } from "@heroicons/react/20/solid";
 
 const Navbar = () => {
@@ -174,9 +174,8 @@ const Navbar = () => {
 
           <Link href="/blog">
             <button
-              type="button"
               className={`${
-                path == "/contact" ? activeBtn : unActiveBtn
+                path.includes("blog") ? activeBtn : unActiveBtn
               } ${btnCSS} `}
             >
               ข่าวสาร
@@ -187,7 +186,7 @@ const Navbar = () => {
             <button
               type="button"
               className={`${
-                path == "/login" ? activeBtn : unActiveBtn
+                path.includes("login") ? activeBtn : unActiveBtn
               } ${btnCSS} `}
             >
               เข้าสู่ระบบ
@@ -214,31 +213,24 @@ const Navbar = () => {
         </Link>
         <Link
           className="bg-blue-500 p-2 rounded-xl text-white h-full w-full"
-          href="/about"
+          href="/about/history"
           onClick={() => setIsOpen(false)}
         >
           เกี่ยวกับเรา
         </Link>
         <Link
           className="bg-blue-500 p-2 rounded-xl text-white h-full w-full"
-          href="/about"
+          href="/course/voc_cert"
           onClick={() => setIsOpen(false)}
         >
           หลักสูตร
         </Link>
         <Link
           className="bg-blue-500 p-2 rounded-xl text-white h-full w-full"
-          href="/contact"
+          href="/about/contact"
           onClick={() => setIsOpen(false)}
         >
           ติดต่อเรา
-        </Link>
-        <Link
-          className="bg-blue-500 p-2 rounded-xl text-white h-full w-full"
-          href="/login"
-          onClick={() => setIsOpen(false)}
-        >
-          เข้าสู่ระบบ
         </Link>
       </div>
     </div>

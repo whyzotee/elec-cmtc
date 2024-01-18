@@ -3,9 +3,9 @@ import Link from "next/link";
 const Footer = () => {
   return (
     <footer>
-      <div className="max-w-7xl m-auto pb-12 divide-y-4 divide-[#303030]">
-        <div className="grid grid-rows-3 ml-4 sm:ml-8 md:ml-12 lg:grid-rows-none lg:grid-cols-3 pb-4">
-          <div>
+      <div className="max-w-7xl m-auto pb-12">
+        <div className="flex flex-col lg:flex-row justify-between ml-4 sm:ml-8 md:ml-12">
+          <div className="lg:w-1/3">
             <h1 className="text-xl">
               แผนกอิเล็กทรอนิกส์ วิทยาลัยเทคนิคเชียงใหม่
             </h1>
@@ -29,9 +29,9 @@ const Footer = () => {
             </div>
           </div>
 
-          <div className="flex flex-col lg:items-center">
-            <h1 className="self-start lg:pl-12 text-xl">บริการ</h1>
-            <ul className="list-disc pl-12 lg:pl-0">
+          <div className="lg:w-1/3 flex flex-col">
+            <h1 className="self-start text-xl">บริการ</h1>
+            <ul className="list-disc pl-12">
               <li>
                 <Link
                   href="https://student.vec.go.th/web/Login.htm?mode=indexStudent"
@@ -53,7 +53,7 @@ const Footer = () => {
             </ul>
           </div>
 
-          <div className="flex flex-col">
+          <div className="lg:w-1/3 flex flex-col">
             <h1 className=" text-xl">สาขางานระดับ ปวช.</h1>
             <ul className="list-disc pl-12">
               <li>
@@ -87,18 +87,11 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="flex justify-between">
-          <p>
-            this website make by{" "}
-            <Link
-              className="text-[#ffd1a8] hover:text-[#FFDAB9] transition-colors"
-              href="https://whyzotee.vercel.app"
-              target="_blank"
-            >
-              whyzotee
-            </Link>
-          </p>
-          <p>Copyright © 2023. All rights reserved.</p>
+        <div className="mt-6 mx-auto bg-blue-500 text-white py-2 px-4 w-fit rounded-lg ">
+          <Link href="https://whyzotee.vercel.app" target="_blank">
+            Electronic CMTC,
+            <span> © 2023 All Rights Reserved.</span>
+          </Link>
         </div>
       </div>
     </footer>
