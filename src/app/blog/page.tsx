@@ -19,41 +19,33 @@ const getBlogDetails = async (id: string) => {
 export default function BlogPage() {
   const params = useSearchParams();
   const router = useRouter();
-  const [loadData, setLoadData] = useState(0);
-  const [blogData, setBlogData] = useState<any>();
+  const [isLoading, setIsLoading] = useState(0);
+  const [blogData, setBlogData] = useState<any>(null);
 
   useEffect(() => {
-    setLoadData(0);
+    setIsLoading(0);
     if (params.get("id") != null) {
       getBlogDetails(params.get("id")!).then((res) => {
         setBlogData(res);
-        setLoadData(2);
+        setIsLoading(2);
       });
     } else {
       getBlogData().then((res) => {
         setBlogData(res);
-        setLoadData(1);
+        setIsLoading(1);
       });
     }
   }, [params, router]);
 
-  if (loadData == 0) {
-    return (
-      <main className="h-screen w-full flex items-center justify-center">
-        <h1>Loading</h1>
-      </main>
-    );
-  }
-
   if (blogData == null) {
     return (
       <main className="h-screen w-full flex items-center justify-center">
-        <h1>Error no blog data</h1>
+        <h1>Error: can&apos;t fetch data from backend</h1>
       </main>
     );
   }
 
-  if (loadData == 1) {
+  if (isLoading == 1) {
     return (
       <main className="max-w-7xl m-auto p-6 md:p-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {blogData.map((element: BlogType) => (
@@ -92,7 +84,7 @@ export default function BlogPage() {
     );
   }
 
-  if (loadData == 2) {
+  if (isLoading == 2) {
     return (
       <main className="max-w-7xl lg:h-[90vh] m-auto flex flex-col lg:flex-row p-6 md:p-12 text-[#303030]">
         <div className="w-full lg:w-1/2">
@@ -108,7 +100,8 @@ export default function BlogPage() {
         <div className="flex flex-col justify-between h-1/2 lg:h-full lg:w-1/2 py-4 lg:px-4">
           <div className="flex flex-col">
             <span className="text-gray-500">
-              /<button onClick={() => router.push("/blog/")}>blog</button>/{1}
+              /<button onClick={() => router.push("/blog/")}>blog</button>/
+              {blogData.id}
             </span>
             <span className="text-xl mt-4">{blogData.topic}</span>
             <span className="h-auto text-gray-600 mt-4">

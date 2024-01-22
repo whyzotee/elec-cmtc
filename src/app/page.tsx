@@ -1,5 +1,6 @@
 "use client";
-import React from "react";
+
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Typed from "typed.js";
@@ -9,6 +10,7 @@ import CmtcRegisStudent2 from "../../public/images/elec_regis_student3.jpg";
 
 import { motion } from "framer-motion";
 import { basePath } from "@/lib/setting";
+import Model3D from "@/components/model3d";
 
 const getBlogData = async () => {
   const res = await fetch(`${basePath}/api/get-home-page.php`);
@@ -21,13 +23,17 @@ const getBlogData = async () => {
 };
 
 export default function Home() {
-  const [blogData, setBlogData] = React.useState<any>([]);
-  const el = React.useRef(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [blogData, setBlogData] = useState<any>(null);
+  const el = useRef(null);
 
-  React.useEffect(() => {
-    getBlogData().then((res) => {
-      setBlogData(res);
-    });
+  useEffect(() => {
+    getBlogData()
+      .then((res) => {
+        setBlogData(res);
+        setIsLoading(false);
+      })
+      .catch((error) => setIsLoading(false));
 
     new Typed(el.current, {
       strings: ["มีงานทำแน่นอน", "ทำงานตรงสาย", "อาชีพในอนาคต"],
@@ -37,14 +43,6 @@ export default function Home() {
       loop: true,
     });
   }, []);
-
-  if (blogData == null) {
-    return (
-      <main className="h-screen w-full flex items-center justify-center">
-        <h1>Loading</h1>
-      </main>
-    );
-  }
 
   return (
     <main className="flex min-h-screen w-full flex-col items-center justify-between overflow-x-hidden">
@@ -56,8 +54,8 @@ export default function Home() {
           fill
         />
         <div className="h-full w-full absolute bg-black bg-opacity-50"></div>
-        <div className="h-full max-w-7xl w-full m-auto flex flex-col justify-center items-center lg:items-start z-10">
-          <div className="flex flex-col text-white ">
+        <div className="h-full max-w-7xl w-full m-auto lg:my-0 flex flex-col lg:flex-row justify-center lg:justify-start items-center z-10">
+          <div className="lg:w-1/2 flex flex-col text-white ">
             <div className="text-4xl lg:text-6xl">
               <motion.h1
                 initial={{ translateX: -100, opacity: 0 }}
@@ -134,41 +132,66 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="max-w-7xl m-auto flex flex-col justify-center items-center pb-12 text-[#303030]">
+      <div className="max-w-7xl w-full m-auto flex flex-col justify-center items-center pb-12 text-[#303030]">
         <h1 className="text-4xl text-left my-12">ประชาสัมพันธ์</h1>
-        <div className="grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-4 m-auto px-4">
-          {blogData.map((element: BlogType) => (
-            <div key={element.id}>
-              <div className="shadow-xl rounded-xl bg-white hover:scale-105 transition-all">
-                <div className="relative h-56">
-                  <Image
-                    className="absolute object-cover rounded-t-xl"
-                    src={element.img_path}
-                    alt={element.img_path}
-                    fill
-                  />
-                  <span className="absolute right-0 bg-white p-1 rounded-md m-2">
-                    {new Date(element.date).toLocaleDateString("th-TH")}
-                  </span>
-                </div>
-                <div className=" flex flex-col p-4">
-                  <h1 className="line-clamp-1 text-xl font-semibold">
-                    {element.topic}
-                  </h1>
-
-                  <p className="h-[4.5rem] w-full line-clamp-3 my-4">
-                    {element.description}
-                  </p>
-                  <Link
-                    href={"/blog/?id=" + element.id}
-                    className="text-center text-blue-500 border-2 border-blue-500 px-3 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors"
-                  >
-                    อ่านต่อ
-                  </Link>
+        <div className="w-full grid grid-rows-3 lg:grid-rows-none lg:grid-cols-3 gap-4 m-auto px-4">
+          {isLoading ? (
+            [1, 2, 3].map((element) => (
+              <div key={element}>
+                <div className="animate-pulse shadow-xl rounded-xl bg-white transition-all">
+                  <div className="relative h-56 bg-gray-200">
+                    <span className="absolute right-0 bg-white p-1 w-24 h-6 rounded-md m-2"></span>
+                  </div>
+                  <div className="w-full flex flex-col p-4 gap-4">
+                    <div className="h-6 w-1/2 bg-gray-200  rounded-lg"></div>
+                    <div className="h-4 bg-gray-200 rounded-lg col-span-2"></div>
+                    <div className="h-4 bg-gray-200 rounded-lg col-span-2"></div>
+                    <div className="h-10 bg-gray-200 rounded-lg col-span-2"></div>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))
+          ) : blogData == null ? (
+            <>
+              <br />
+              <span className="flex justify-center items-center h-48">
+                Error: can&apos;t fetch data from backend
+              </span>
+              <br />
+            </>
+          ) : (
+            blogData.map((element: BlogType) => (
+              <div key={element.id}>
+                <div className="shadow-xl rounded-xl bg-white hover:scale-105 transition-all">
+                  <div className="relative h-56">
+                    <Image
+                      className="absolute object-cover rounded-t-xl"
+                      src={element.img_path}
+                      alt={element.img_path}
+                      fill
+                    />
+                    <span className="absolute right-0 bg-white p-1 rounded-md m-2">
+                      {new Date(element.date).toLocaleDateString("th-TH")}
+                    </span>
+                  </div>
+                  <div className=" flex flex-col p-4">
+                    <h1 className="line-clamp-1 text-xl font-semibold">
+                      {element.topic}
+                    </h1>
+                    <p className="h-[4.5rem] w-full line-clamp-3 my-4">
+                      {element.description}
+                    </p>
+                    <Link
+                      href={"/blog/?id=" + element.id}
+                      className="text-center text-blue-500 border-2 border-blue-500 px-3 py-2 rounded-md hover:bg-blue-500 hover:text-white transition-colors"
+                    >
+                      อ่านต่อ
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
         </div>
       </div>
     </main>

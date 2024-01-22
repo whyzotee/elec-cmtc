@@ -1,15 +1,16 @@
 "use client";
-import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import Image from "next/image";
+import { getCookie } from "cookies-next";
 import { usePathname } from "next/navigation";
 import { Menu, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { ChevronDownIcon, Bars3Icon } from "@heroicons/react/20/solid";
 
 const Navbar = () => {
   const path = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState<any>(null);
 
   const activeBtn = "bg-blue-500 hover:bg-blue-700 text-white ";
   const unActiveBtn =
@@ -17,6 +18,10 @@ const Navbar = () => {
 
   const btnCSS =
     "inline-flex justify-center rounded-md border border-transparent px-4 py-2 text-sm font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 transition-colors";
+
+  useEffect(() => {
+    setIsLogin(getCookie("key") != undefined);
+  }, [path]);
 
   return (
     <div className="sticky top-0 w-full p-2 flex flex-col justify-center items-center text-[#303030] bg-white border-b-8 border-[#0c66fa] z-50">
@@ -181,17 +186,23 @@ const Navbar = () => {
               ข่าวสาร
             </button>
           </Link>
-
-          <Link href="/login">
-            <button
-              type="button"
-              className={`${
-                path.includes("login") ? activeBtn : unActiveBtn
-              } ${btnCSS} `}
-            >
-              เข้าสู่ระบบ
-            </button>
-          </Link>
+          {isLogin == null ? (
+            <button className={`${unActiveBtn} ${btnCSS} w-24`}></button>
+          ) : !isLogin ? (
+            <Link href="/login">
+              <button
+                className={`${
+                  path.includes("login") ? activeBtn : unActiveBtn
+                } ${btnCSS} w-24`}
+              >
+                เข้าสู่ระบบ
+              </button>
+            </Link>
+          ) : (
+            <a href="/dashboard" className={`${unActiveBtn} ${btnCSS} w-24`}>
+              Dashboard
+            </a>
+          )}
         </div>
         <div className="flex flex-col md:hidden">
           <button className=" mr-4" onClick={() => setIsOpen(!isOpen)}>

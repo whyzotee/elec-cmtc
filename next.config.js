@@ -8,6 +8,7 @@ const nextConfig = {
         unoptimized: true
     },
     reactStrictMode: false,
+    transpilePackages: ['three'],
     // basePath: isProd ? 'http://localhost' : undefined
 }
 
