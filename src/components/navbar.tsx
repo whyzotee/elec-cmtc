@@ -23,6 +23,8 @@ const Navbar = () => {
     setIsLogin(getCookie("key") != undefined);
   }, [path]);
 
+  if (path.startsWith("/stream")) return null;
+
   return (
     <div className="sticky top-0 w-full p-2 flex flex-col justify-center items-center text-[#303030] bg-white border-b-8 border-[#0c66fa] z-50">
       <div className="max-w-7xl w-full flex gap-4 items-center justify-between">

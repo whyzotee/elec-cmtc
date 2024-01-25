@@ -10,7 +10,6 @@ import CmtcRegisStudent2 from "../../public/images/elec_regis_student3.jpg";
 
 import { motion } from "framer-motion";
 import { basePath } from "@/lib/setting";
-import Model3D from "@/components/model3d";
 
 const getBlogData = async () => {
   const res = await fetch(`${basePath}/api/get-home-page.php`);
@@ -106,14 +105,14 @@ export default function Home() {
           ประกาศจากทางวิทยาลัย
         </motion.h1>
         <div className="flex gap-4 mt-12 px-4">
-          <Link href="#" className="hover:scale-105 transition-all">
+          <Link href="#" className="w-1/2 hover:scale-105 transition-all">
             <Image
               src={ElecRegisStudent}
               alt="elec_regis_student"
               className="h-full object-cover rounded-xl"
             />
           </Link>
-          <div className="flex flex-col justify-between">
+          <div className="flex w-1/2 flex-col justify-between">
             <Link href="#" className="hover:scale-105 transition-all">
               <Image
                 src={CmtcRegisStudent2}

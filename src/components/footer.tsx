@@ -1,6 +1,11 @@
+"use client";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const Footer = () => {
+  const path = usePathname();
+
+  if (path.startsWith("/stream")) return null;
   return (
     <footer>
       <div className="max-w-7xl m-auto pb-12">
